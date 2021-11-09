@@ -67,7 +67,7 @@ const Home = () => {
                 name='Search'
                 variant='outlined'
                 label='Search by Title or Author'
-                onKeyPress={handleKeyPress}
+                onKeyDown={handleKeyPress}
                 fullWidth
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
