@@ -57,6 +57,8 @@ export default makeStyles({
   subtitle: {
     right: '500px',
     top: '17px',
+    textDecoration: 'none',
+    fontSize: 24,
   },
   format: {
     right: '20px',

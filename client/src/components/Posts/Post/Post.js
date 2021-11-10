@@ -1,26 +1,47 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { Card, CardActions, CardContent, Button, Typography } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CreateIcon from '@material-ui/icons/Create';
 
-import useStyles from './styles';
+import { getPostsBySearch } from '../../../actions/posts';
+import { deletePost } from '../../../actions/posts';
 import { useDispatch } from 'react-redux';
 
-import { deletePost } from '../../../actions/posts';
+import useStyles from './styles';
+
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
 
 const Post = ({ post, setCurrentId }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-
+  const query = useQuery();
+  const history = useHistory();
+  const page = query.get('page') || 1;
+  const searchQuery = query.get('searchQuery');
+  const [search, setSearch] = useState('');
+  const [author, setAuthor] = useState('');
+  const [tags, setTags] = useState([]);
   const [showResource, setShowResource] = useState(true);
   const handleShowResource = () => setShowResource((prevShowResource) => !prevShowResource);
+
+  const searchPost = () => {
+    if (search.trim() || author.trim() || tags) {
+      dispatch(getPostsBySearch({ search, author, tags: tags.join(',') }));
+
+      history.push(`/posts/search?searchQuery=${search || 'none'}&tags=${tags.join(',')}`);
+    } else {
+      history.push('/');
+    }
+  };
 
   return (
     <Card className={classes.card} raised elevation={6}>
       <CardContent>
         <Typography variant="h5" >{post.title}</Typography>
-        <Typography className={classes.subtitle} variant="h6">{`by ${post.author}`}</Typography>
+        <Link className={classes.subtitle} onMouseUp={searchPost} value={post.author} to='' onMouseDown={() => setSearch(post.author)}>{`by ${post.author}`}</Link>
       </CardContent>
       <Button size="small" color="primary" variant='contained' className={classes.view} onClick={handleShowResource}>{showResource === false ? 'Hide' : 'Show'}</Button>
       <div handleShowResource={handleShowResource} className={showResource === false ? classes.show : classes.hide}>
