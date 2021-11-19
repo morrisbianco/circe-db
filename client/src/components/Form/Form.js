@@ -56,7 +56,7 @@ const Form = ({ currentId, setCurrentId }) => {
       <form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
         <Typography variant="h6">{currentId ? 'Edit' : 'Add'} a Resource</Typography>
         <FormControl className={classes.dropdown}>
-          <InputLabel id="select-format">Format</InputLabel>
+          <InputLabel id="select-format">Internal/External</InputLabel>
           <Select
             name="Format"
             labelId="select-format"
